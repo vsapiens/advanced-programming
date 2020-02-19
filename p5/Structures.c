@@ -4,7 +4,7 @@
 
 struct mission
 {
-    int iDigits[9];
+    int iDigits;
     char cIdentifier[3];
 };
 typedef struct mission Mission;
@@ -19,11 +19,11 @@ struct agent
 
 typedef struct agent Agent;
 
-Mission *newMission(int iDigits[9], char cIdentifier[3])
+Mission *newMission(int iDigits, char cIdentifier[3])
 {
     Mission *m = (Mission *)malloc(sizeof(Mission));
     strcpy(m->cIdentifier, cIdentifier);
-    *(m)->iDigits = *iDigits;
+    m->iDigits = iDigits;
     return m;
 }
 
@@ -40,20 +40,15 @@ Agent *newAgent(char sName[50], char sLastName[50], int iAge, char cGender[6], M
 
 int main(void)
 {
-    int iIdent1[] = {1, 2, 6, 8, 9, 0, 0, 2, 1};
-    int iIdent2[] = {1, 2, 6, 7, 9, 0, 0, 3, 2};
-    char code1[] = "MEX";
-    char code2[] = "LON";
-    char name1[] = "Vsapiens";
-    char name2[] = "Loptt";
 
     Agent *list[3];
-    Mission *m1 = newMission(iIdent1, code1);
-    Mission *m2 = newMission(iIdent2, code2);
+    Mission *m1 = newMission(216890021, "MX-");
+    Mission *m2 = newMission(216890022, "USA");
+    Mission *m3 = newMission(216890023, "GER");
 
     Agent *agent1 = newAgent("Vocem", "Sapiens", 21, "Male", *m1);
     Agent *agent2 = newAgent("James", "Bond", 45, "Male", *m2);
-    Agent *agent3 = newAgent("Eames", "Westbound", 34, "Female", *m2);
+    Agent *agent3 = newAgent("Eames", "Westbound", 34, "Female", *m3);
 
     list[0] = agent1;
     list[1] = agent2;
@@ -69,10 +64,7 @@ int main(void)
         {
             printf("%c", list[iCounter]->mMission.cIdentifier[i]);
         }
-        for (int i = 0; i < 9; ++i)
-        {
-            printf("%d", list[iCounter]->mMission.iDigits[i]);
-        }
+          printf("%d", list[iCounter]->mMission.iDigits);
         printf("\n");
     }
 
