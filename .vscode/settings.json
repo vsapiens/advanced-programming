@@ -2,7 +2,12 @@
     "files.associations": {
         "stdbool.h": "c",
         "random": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "chrono": "cpp",
+        "ctime": "cpp",
+        "condition_variable": "cpp",
+        "mutex": "cpp",
+        "thread": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }
