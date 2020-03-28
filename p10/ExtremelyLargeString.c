@@ -4,16 +4,18 @@
 // Matrícula: A01039859
 // Fecha: 13/03/2020
 //
-// Obtiene el valor de diferentes valores de diferentes bases y demás
+// Obtiene el valor de diferentes valores de diferentes basesydemás
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+//Estructura de nodo
 struct Node
 {
     char cLetter;
     struct Node *next;
 };
+//Estructura de LinkedList
 struct LinkedList
 {
     struct Node *head, *tail;
@@ -43,7 +45,7 @@ union Data {
 int main(void)
 {
     struct LinkedList *keylogger;
-    printf("Por favor, teclea dos caracteres seguidos:\n");
+    printf("Por favor, teclea un string largo seguido:\n");
     while (strncmp("\n", &data.c, 1) != 0)
     {
         scanf("%c", &data.c);

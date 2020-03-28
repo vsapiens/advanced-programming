@@ -3,7 +3,7 @@
 // Matrícula: A01039859
 // Fecha: 18/02/2020
 //
-// Obtiene el valor y el tamaño de espacio que ocupan diferentes tipos de datos.
+// Obtiene el valoryel tamaño de espacio que ocupan diferentes tipos de datos.
 
 #include <stdio.h>
 #include <float.h>
@@ -27,9 +27,9 @@ int main(void)
 
     //Despliega el espacio de almacenamiento de un integer
     printf("Your integer %i storage size is %lu bytes.\n", iInteger, sizeof(iInteger));
-    //Despliega el espacio de almacenamiento de un char y sus valores respectivos como char y como valor ASCII
+    //Despliega el espacio de almacenamiento de un charysus valores respectivos como charycomo valor ASCII
     printf("Your char %c storage size is %lu bytes. And I can read it as %c or as %d. \n", cChar, sizeof(cChar), cChar, cChar);
-    //Despliega el espacio de almacenamiento de un double y los valores min y max positivos
+    //Despliega el espacio de almacenamiento de un doubleylos valores minymax positivos
     printf("Your double %lf storage size is %lu bytes, I can read any number from %.10e to %.10e in this data type.  \n", dDouble, sizeof(dDouble), DBL_MIN, DBL_MAX);
 
     return 0;
