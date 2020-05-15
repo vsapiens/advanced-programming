@@ -1,3 +1,9 @@
+
+//
+// Autor: Erick González
+// Matrícula: A01039859
+// Fecha: 10/05/2020
+//
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,9 +11,9 @@
 
 void main()
 {
-	char dirStr[] = "C:\\Users\\Usuario\ 1\\file";
-	char dirFileStr[] = "C:\\Users\\Usuario\ 1\\file\\algo.txt";
-	char dirFileStr2[] = "C:\\Users\\Usuario\ 1\\file\\algo2.txt";
+	char dirStr[] = "C:\\Users\\Usuario\ 1\\File";
+	char dirFileStr[] = "C:\\Users\\Usuario\ 1\\File\\Algo.txt";
+	char dirFileStr2[] = "C:\\Users\\Usuario\ 1\\File\\Algo2.txt";
 	HANDLE changeNotifHandle;
 	HANDLE fileHandle;
 	char chr = 0;
