@@ -1,138 +1,58 @@
 //
 // Autor: Erick González
 // Matrícula: A01039859
-// Fecha: 24/05/2020
+// Fecha: 29/05/2020
 //
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
-#include <ctype.h>
-#include <string.h>
-//Definición de estructura para manejar los trabajos del sistema
-typedef struct osTask
+#include <omp.h>
+#include <math.h>
+#include <time.h>
+//Single threaded 
+void singleThreaded()
 {
-    int id;
-    int time;
-    int *dependencies;
-    int size;
-} osTask;
-//Creación de una nueva task del sistema
-osTask *NewTask(int id, int time, int dependencies[50], int size)
-{
-    osTask *task = malloc(sizeof(osTask));
-    task->id = id;
-    task->time = time;
-    task->dependencies = dependencies;
-    task->size = size;
-    return task;
-}
+    printf("Single Threaded Calculation of Pi\n");
+    time_t init = clock();
 
-int getId(char *id)
-{
-    int ID = 0, count = 1;
-    while (*id != '\0')
+    long double dx = 0.0001, A = 0, x = -1;
+    while (x < 1)
     {
-        if (isdigit(*id))
+        A = A + sqrt(1 - pow(x, 2)) * dx;
+        x += dx;
+    }
+    time_t limit = clock();
+
+    printf("The approximation of pi is: %.15Lf\n", A * 2);
+    printf("Time elapsed: %.5f\n", (double)(limit - init) / CLOCKS_PER_SEC);
+}
+//Multi threaded
+void multiThreaded()
+{
+    printf("Multi Threaded Calculation of Pi\n");
+    time_t init = clock();
+
+    long double dx = 0.001, A = 0,x,dy,diff;
+    int count;
+
+#pragma omp parallel
+    {
+#pragma omp for private(x, count, dy,diff) reduction(+:A)
+        for (count = 0; count < 1000; count++)
         {
-            ID += atoi(id) * count;
-            count *= 10;
+            x = count * dx;
+            dy = sqrt(1.0 - x * x);
+            diff = dx * dy;
+            A += diff;
         }
-        count++;
     }
-    return ID;
-}
-int *parseFile(char *id, int size)
-{
-    int *dependencies = malloc(size * sizeof(int)), count = 0;
-    char *token = strtok(id, ",");
-    while (token != NULL)
-    {
-        int ID = getId(token);
-        dependencies[count++] = ID;
-        token = strtok(NULL, ",");
-    }
-    return dependencies;
-}
-osTask **initialize(char *file, int lines)
-{
-    FILE *in;
-    char task[5], dependency[50];
-    int time, count = 0;
-    in = fopen(file, "r");
-    osTask **tasks = malloc(lines * sizeof(osTask));
-    //Initializers
-    int elems = 0;
-    while (fscanf(in, "%s %d %s", task, &time, dependency) != EOF)
-    {
-        elems = 0;
-        if (*dependency != '-')
-        {
-            char *parser = malloc(sizeof(dependency));
-            strcpy(parser, dependency);
-            char *token;
-            token = strtok(parser, ",");
-            while (token != NULL)
-            {
-                elems++;
-                token = strtok(NULL, ",");
-            }
-            free(parser);
-        }
-        int ID = getId(task), *dependentsID = parseFile(dependency, elems);
-        tasks[count] = NewTask(ID, time, dependentsID, elems);
-        count++;
-    }
-    fclose(in);
-    return tasks;
-};
-//Lista de los threads
-pthread_t threadList[50];
-void *operatingSystem(void *id)
-{
-    osTask *task = (struct osTask *)id;
-
-    printf("Opening Thread No.%d\n", task->id);
-
-    for (int iCounter = 0; iCounter < task->size; iCounter++)
-    {
-        printf("Current Thread No.%d\t=> Dependent: %d\t Time:%d\n", task->id, task->dependencies[iCounter], task->time);
-        pthread_join(threadList[task->dependencies[iCounter] - 1], NULL);
-    }
-
-    printf("Closing Thread No.%d\n", task->id);
-    pthread_exit(NULL);
+    time_t limit = clock();
+    printf("The approximation of pi is: %.15Lg\n", A*4);
+    printf("Time elapsed: %.5f\n", (double)(limit - init) / CLOCKS_PER_SEC);
 }
 int main()
 {
-    //Count lines of the file
-    FILE *in;
-    int lines = 0, noThred = 0;
-    char data[20];
-    char *file = "test1.txt";
-    in = fopen(file, "r");
-    while (fscanf(in, "%s %s %s", data, data, data) == 3)
-    {
-        lines++;
-    }
-    fclose(in);
-    osTask **tasks = initialize(file, lines);
-    for (int currT = 0; currT < lines; ++currT)
-    {
-        noThred = pthread_create(threadList + currT, NULL, operatingSystem, (void *)tasks[currT]);
-        if (noThred)
-        {
-            printf("Error to create a thread.\n");
-            exit(-1);
-        }
-        /*         
-        printf("%d\t%d\t", tasks[i]->id, tasks[i]->time);
-        printf("Dependencies: ");
-        for (int j = 0; j < tasks[i]->size; ++j)
-        {
-            printf(" %d", tasks[i]->dependencies[j]);
-        };
-        printf("\n"); 
-        */
-    }
+
+    singleThreaded();
+    multiThreaded();
     return 0;
 }
